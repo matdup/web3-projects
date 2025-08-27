@@ -1,0 +1,13 @@
+# macOS
+.DS_Store
+
+# node.js
+node_modules/
+
+# IDE
+.vscode/
+
+# Dépôts internes (à gérer plus tard si besoin)
+DiamondStandard/
+SecureVault Protocol/
+Tokenization Platform Mock/
