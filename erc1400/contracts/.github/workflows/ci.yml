@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test-and-analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: Install Python & Slither
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install slither-analyzer
+
+      - name: Cache deps
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.foundry
+            lib
+          key: ${{ runner.os }}-deps-${{ hashFiles('**/foundry.toml') }}
+
+      - name: Install deps
+        run: forge install --no-commit foundry-rs/forge-std openzeppelin/openzeppelin-contracts
+
+      - name: Run tests
+        run: forge test -vvv --fuzz-runs 300
+
+      - name: Slither
+        run: slither . --solc-version 0.8.25 --solc-remaps "$(forge remappings)" --triage

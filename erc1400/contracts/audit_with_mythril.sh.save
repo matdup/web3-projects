@@ -1,0 +1,26 @@
+#!/bin/bash
+
+CONTRACT_PATH="src/contracts/ERC1400Token.sol"
+OUTPUT_DIR="build"
+BIN_FILE="$OUTPUT_DIR/ERC1400Token.bin"
+
+echo "🧱 [1/3] Compilation du contrat avec solc..."
+solc --bin --overwrite --optimize --allow-paths . \
+  --base-path ./src/contracts \
+  --include-path ./lib \
+  --output-dir $OUTPUT_DIR \
+  --solv 0.8.25 \
+  $CONTRACT_PATH
+
+if [ ! -f "$BIN_FILE" ]; then
+  echo "❌ Compilation échouée ou fichier .bin non trouvé"
+  exit 1
+fi
+
+BYTECODE=$(cat $BIN_FILE)
+
+echo "🔍 [2/3] Analyse du bytecode avec Mythril..."
+myth analyze --code 0x$BYTECODE
+
+echo "✅ [3/3] Analyse terminée."
+

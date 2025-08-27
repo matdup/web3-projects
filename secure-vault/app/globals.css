@@ -1,0 +1,25 @@
+/* app/globals.css */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+html, body {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+#__next, #root {
+  height: 100%;
+}
+
+.dark {
+  background-color: #111827;
+  color: #f9fafb;
+}
